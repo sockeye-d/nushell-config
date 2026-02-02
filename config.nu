@@ -10,9 +10,13 @@ use git.nu
 use clipboard.nu *
 use plasma.nu *
 use local.nu *
+use mkcd.nu
+use update.nu
 
 $env.config.show_banner = false
 $env.config.buffer_editor = 'micro'
+$env.VISUAL = 'micro'
+$env.EDITOR = 'micro'
 $env.config.table.mode = 'rounded'
 $env.config.table.trim = {
   methodology: "wrapping"

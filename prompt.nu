@@ -7,7 +7,7 @@ def git_prompt_block [value: int, icon: string, color: string, value_color: stri
 }
 
 def prompt [] {
-    let dir = match (do -i { $env.PWD | path relative-to $nu.home-path }) {
+    let dir = match (do -i { $env.PWD | path relative-to $nu.home-dir }) {
         null => $env.PWD
         '' => '~'
         $relative_pwd => ([~ $relative_pwd] | path join)

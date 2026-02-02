@@ -4,6 +4,8 @@ export def grub [] {
 
 export def kwin-effects [] {
     yay -S ...(yay -Qq | find kwin-effect --no-highlight | where $it !~ ".*?-debug")
+    qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect kwin4_effect_shapecorners
+    qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect forceblur
 }
 
 export def debug-packages [] {
