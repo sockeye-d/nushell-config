@@ -61,16 +61,43 @@ def prompt [] {
 (ansi reset)(ansi green)╰($path_segment | str replace --all (char path_sep) $"($separator_color)(char path_sep)($path_color)")" | str substring 1..
 }
 
+def battery-string []: nothing -> string {
+    const BAT_PATH = '/sys/class/power_supply/BAT1/capacity'
+    if not ($BAT_PATH | path exists) {
+        return ''
+    }
+    const BATTERY_ICONS = [󰁺 󰁻 󰁼 󰁽 󰁾 󰁿 󰂀 󰂁 󰂂 󰁹]
+    let charging_icon = $"(ansi yellow)󱐋 "
+
+    # create a right prompt in magenta with green separators and am/pm underlined
+    let battery_charge = open '/sys/class/power_supply/BAT1/capacity' | into int
+    let battery_icon = $BATTERY_ICONS | get ([($battery_charge / 100 * ($BATTERY_ICONS | length) | math round), (($BATTERY_ICONS | length | into int) - 1)] | math min)
+    let discharging = "Discharging" == (cat '/sys/class/power_supply/BAT1/status')
+    let battery_color = if $discharging {
+        match $battery_charge {
+            00..20 => (ansi red),
+            20..35 => (ansi yellow),
+            35..100 => (ansi green),
+        }
+    } else {
+        (ansi cyan)
+    }
+
+    $"(if $discharging { '' } else { $charging_icon } )($battery_color)($battery_icon) (ansi default)($battery_charge)%"
+}
+
 def "prompt right" [] {
+    let battery = battery-string
+
     let time_segment = [
         (ansi reset)
         (ansi magenta)
         (date now | format date '%x %X')
     ] | str join
 
-    let last_exit_code = if ($env.LAST_EXIT_CODE != 0) { $"(ansi rb)($env.LAST_EXIT_CODE)" } else { "" }
+    let last_exit_code = if ($env.LAST_EXIT_CODE != 0) { $"(ansi rb)($env.LAST_EXIT_CODE)" } else { null }
 
-    ([$last_exit_code, (char space), $time_segment] | str join)
+    ([$last_exit_code, $battery, $time_segment] | iter filter-map { |x| $x } | str join $"(ansi default) ")
 }
 
 export-env {
