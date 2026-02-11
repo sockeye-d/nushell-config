@@ -24,8 +24,10 @@ def prompt [] {
         let tag_count: int = git tag --list | lines | length
         let gstat_result: record = if ($tag_count > 30) { gstat --no-tag } else { gstat }
         if $gstat_result.repo_name != "no_repository" {
-            let remote: string = if (git remote get-url origin | complete | get exit_code) == 0 {
-                git remote get-url origin | url parse | get path | str trim --char / | split row / | first
+        	let origin_url = git remote get-url origin | complete
+            let remote: string = if $origin_url.exit_code == 0 {
+            	let origin_url = $origin_url.stdout | str trim
+                try { $origin_url | url parse | get path | str trim --char / | split row / | first } catch { $origin_url }
             } else {
                 "?"
             }
