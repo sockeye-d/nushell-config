@@ -30,3 +30,11 @@ $env.config.completions.algorithm = 'fuzzy'
 $env.config.rm.always_trash = true
 
 alias fg = job unfreeze
+
+# print $"Welcome to nushell,\nbased on the nu language,\nwhere all data is structured!\n\n      nushell is software for adults.\n      Please enter your age below\n(ellie)"
+# let age: int = input "Your age: " | into int
+# if ($age >= 18) {
+# 	print Accepted
+# } else {
+# 	exit
+# }
