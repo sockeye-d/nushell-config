@@ -12,6 +12,7 @@ use plasma.nu *
 use local.nu *
 use mkcd.nu
 use update.nu
+use opam-env.nu
 
 $env.config.show_banner = false
 $env.config.buffer_editor = 'micro'
