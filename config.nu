@@ -9,10 +9,10 @@ use dl.nu
 use git.nu
 use clipboard.nu *
 use plasma.nu *
-use local.nu *
 use mkcd.nu
 use update.nu
 use opam-env.nu
+source local.nu
 
 $env.config.show_banner = false
 $env.config.buffer_editor = 'micro'
